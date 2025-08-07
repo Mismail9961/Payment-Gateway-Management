@@ -1,0 +1,27 @@
+# Node dependencies
+node_modules/
+
+# Build output
+dist/
+out/
+build/
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# VSCode settings (optional)
+.vscode/
+
+# Coverage reports
+coverage/
+
+# OS-specific junk
+*.swp
