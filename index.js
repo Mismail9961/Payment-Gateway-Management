@@ -7,7 +7,7 @@ import morgan from "morgan";
 import hpp from "hpp";
 import rateLimit from "express-rate-limit";
 import connectDB from "./dataBase/db.js";
-
+import healthRoute from "./routes/health.routes.js";
 // Load environment variables
 dotenv.config();
 
@@ -60,7 +60,7 @@ app.use(
 );
 
 // API Routes
-
+app.use("/health",healthRoute)
 
 // 404 Handler
 app.use((req, res) => {
