@@ -8,6 +8,7 @@ import hpp from "hpp";
 import rateLimit from "express-rate-limit";
 import connectDB from "./dataBase/db.js";
 import healthRoute from "./routes/health.routes.js";
+import UserRoutes from "./routes/user.routes.js"
 // Load environment variables
 dotenv.config();
 
@@ -61,6 +62,7 @@ app.use(
 
 // API Routes
 app.use("/health",healthRoute)
+app.use("/api/v1/user",UserRoutes)
 
 // 404 Handler
 app.use((req, res) => {

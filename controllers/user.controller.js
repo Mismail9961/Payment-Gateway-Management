@@ -1,6 +1,8 @@
 import { User } from "../models/user.model.js";
 import { generateToken } from "../utils/generateToken.js";
 import { ApiError, catchAsync } from "../middleware/error.middleware.js";
+import e from "cors";
+import { deleteVideoFromCloudinary, uploadmedia } from "../utils/cloudinary.js";
 
 // Create a new account
 export const createUserAccount = catchAsync(async (req, res) => {
@@ -47,7 +49,7 @@ export const signOutUser = catchAsync(async (_, res) => {
     res.cookie("token", "", { maxAge: 0 });
     return res.status(200).json({
         success: true,
-        message: "Signed out successfully",
+        message: "Signed out Successfully",
     });
 });
 
@@ -69,4 +71,40 @@ export const getCurrentUserProfile = catchAsync(async (req, res) => {
             totalEnrolledCourses: user.totalEnrolledCourses,
         },
     });
+});
+
+export const UpdateUserProfile = catchAsync(async (req, res) => {
+    const {email,name,bio} = req.body
+    const updateData = {
+        name,
+        email:email?.toLowerCase(),
+        bio
+    };
+
+    if(req.file){
+        const avatarResult = await UploadMedia(req.file.path);
+        updateData.avatar = avatarResult.secure_url
+
+        //delete old avatar:
+        const user = await User.findById(req.id);
+        if(user.avatar && user.avatar !== 'default-avatar.png'){
+            await deleteVideoFromCloudinary(user.avatar)
+        };
+    };
+
+    const updateUser = await User.findByIdAndUpdate(
+        req.id,
+        updateData,
+        {new:true,runValidators:true}
+    );
+
+    if(!updateUser){
+        throw new ApiError("User not Found",404)
+    }
+
+    res.status(200).json({
+        success:true,
+        message: "User Updated Successfully",
+        data: updateUser
+    })
 });
