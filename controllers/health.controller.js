@@ -40,6 +40,6 @@ function getReadyStateText(state) {
         case 1: return 'connected';
         case 2: return 'connecting';
         case 3: return 'disconnecting';
-        default: return 'unknown';
+        default: return 'Something Went Wrong';
     }
 }
